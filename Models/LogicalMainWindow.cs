@@ -10,6 +10,7 @@ namespace WpfApp1.Models
 {
     public class LogicalMainWindow : INotifyPropertyChanged
     {
+
         #region Реализация интерфейса + метод обновления
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

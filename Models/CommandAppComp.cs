@@ -35,5 +35,10 @@ namespace WpfApp1.Models
             this.execute(parameter);
         }
         #endregion
+
+        public static void Add(Data.Company company,View.AddComp addComp)
+        {
+            Models.LogicalAddCompany.AddCompanyBD(company, addComp);
+        }
     }
 }

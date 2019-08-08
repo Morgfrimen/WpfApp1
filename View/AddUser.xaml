@@ -37,17 +37,20 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <TextBox Margin="0,10,0,0" Height="20">
+            <TextBox Margin="0,10,0,0" Height="20"
+                     x:Name="Name">
                 <TextBox.SelectionBrush>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
                 </TextBox.SelectionBrush>
             </TextBox>
-            <TextBox  Margin="0,10,0,0" Height="20">
+            <TextBox  Margin="0,10,0,0" Height="20"
+                      x:Name="Login">
                 <TextBox.SelectionBrush>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
                 </TextBox.SelectionBrush>
             </TextBox>
-            <TextBox   Margin="0,10,0,0" Height="20">
+            <TextBox   Margin="0,10,0,0" Height="20"
+                       x:Name="Password">
                 <TextBox.SelectionBrush>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
                 </TextBox.SelectionBrush>
@@ -55,7 +58,8 @@
         </StackPanel>
 
         <Button Grid.Column="0" Grid.Row="1" Margin="80,5,80,5"
-                Content="Добавить"/>
+                Content="Добавить"
+                Command="{Binding AddStringUserBD}"/>
         <Button Grid.Column="1" Grid.Row="1" Margin="80,5,80,5"
                 Content="Отмена"
                 Command="{Binding ExitCommandUser}"/>

@@ -11,6 +11,12 @@ namespace WpfApp1.Models.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
-       
+        public ICollection<User> Users { get; set; }
+        public Company()
+        {
+            Users = new List<User>();
+        }
+
+
     }
 }

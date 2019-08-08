@@ -22,11 +22,11 @@
             <RowDefinition Height="0.7*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0">
-            <TextBlock Text="Введите имя нового пользователя: "
+            <TextBlock Text="Введите название новой компании: "
                        TextAlignment="Right"
                        Margin="0,10,0,0"
                        Height="20"/>
-            <TextBlock Text="Введите логин нового пользователя: "
+            <TextBlock Text="Введите статус договора: "
                        TextAlignment="Right"
                        Margin="0,10,0,0"
                        Height="20"/>
@@ -34,45 +34,23 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <TextBox Margin="0,10,0,0" Height="20">
+            <TextBox Margin="0,10,0,0" Height="20" x:Name="Name">
                 <TextBox.SelectionBrush>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
                 </TextBox.SelectionBrush>
             </TextBox>
             <ComboBox  Margin="0,10,0,0" Height="20" x:Name="Combo" SelectedIndex="0" Padding="2,0,0,0">
-                <Border BorderThickness="1" Margin="0"
-                        Width="{Binding ElementName=Combo,
-                    Path=ActualWidth}">
-                    <Border.BorderBrush>
-                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
-                    </Border.BorderBrush>
-                    <TextBlock Text="Ещё не заключен"/>
-                </Border>
-                
-                <Border BorderThickness="1" Margin="0"
-                        Width="{Binding ElementName=Combo,
-                    Path=ActualWidth}">
-                    <Border.BorderBrush>
-                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
-                    </Border.BorderBrush>
-                    <TextBlock Text="Заключен"/>
-                </Border>
-
-                <Border BorderThickness="1" Margin="0"
-                        Width="{Binding ElementName=Combo,
-                    Path=ActualWidth}">
-                    <Border.BorderBrush>
-                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionTextColorKey}}"/>
-                    </Border.BorderBrush>
-                    <TextBlock Text="Расторгнут"/>
-                </Border>
+                <TextBlock Text="Ещё не заключен"/>
+                <TextBlock Text="Заключен"/>
+                <TextBlock Text="Расторгнут"/>
 
             </ComboBox>
 
         </StackPanel>
 
         <Button Grid.Column="0" Grid.Row="1" Margin="80,5,80,5"
-                Content="Добавить"/>
+                Content="Добавить"
+                Command="{Binding AddStringBD}"/>
         <Button Grid.Column="1" Grid.Row="1" Margin="80,5,80,5"
                 Content="Отмена"
                 Command="{Binding ExitCommandComp}"/>

@@ -16,6 +16,8 @@ namespace WpfApp1.ViewModels
         #region Переменные
         MainWindow window;
         View.AddUser user;
+        View.AddUserCompany userCompany;
+        public View.AddUserCompany AddUserCompany { get => userCompany; set => userCompany = value; }
         public View.AddUser AddUser { get => user; set => user = value; }
         View.AddComp comp;
         public View.AddComp AddComp { get => comp; set => comp = value; }
@@ -58,6 +60,7 @@ namespace WpfApp1.ViewModels
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            
             Models.Data.ModelCode.CompanyContext context = new Models.Data.ModelCode.CompanyContext();
             Models.LogicalMainWindow.PrintDataGrid(window.UserBD, context.Users.ToList());
             Models.LogicalMainWindow.PrintDataGrid(window.CompanBD, context.Companies.ToList());
@@ -85,9 +88,9 @@ namespace WpfApp1.ViewModels
                 return _addCommandUser ??
                   (_addCommandUser = new Models.CommandMainWindow(obj =>
                   {
-                      View.AddComp user = new View.AddComp(window);
-                      comp = user;
-                      user.Show();
+
+                      Models.CommandAddUser.WindowsAdd();
+                      
                   }));
             }
         }
@@ -100,7 +103,8 @@ namespace WpfApp1.ViewModels
                 return _exitCommandUser ??
                   (_exitCommandUser = new Models.CommandAddUser(obj =>
                   {
-                      user.Close();
+                      Application.Current.Windows[Application.Current.Windows.Count-1].Close();
+                      //user.Close();
                   }));
             }
         }
@@ -114,6 +118,20 @@ namespace WpfApp1.ViewModels
                   (_addStringUserBD = new Models.CommandAddUser(obj =>
                   {
                       Models.CommandAddUser.Add(Models.LogicalAddCompany.Company, user);
+                  }));
+            }
+        }
+
+        //форма 2
+        private Models.CommandAddUser _clickButtonAdd;
+        public Models.CommandAddUser ClickButtonAdd
+        {
+            get
+            {
+                return _clickButtonAdd ??
+                  (_clickButtonAdd = new Models.CommandAddUser(obj =>
+                  {
+                      Models.CommandAddUser.ClickButtonAdd(AddUserCompany);
                   }));
             }
         }
@@ -144,7 +162,15 @@ namespace WpfApp1.ViewModels
                 return _exitCommandComp ??
                   (_exitCommandComp = new Models.CommandAppComp(obj =>
                   {
-                      comp.Close();
+                      try
+                      {
+                          comp.Close();
+                      }
+                      catch
+                      {
+
+                      }
+                      
                   }));
             }
         }
@@ -173,8 +199,10 @@ namespace WpfApp1.ViewModels
                 return _chanded ??
                   (_chanded = new Models.CommandMainWindow(obj =>
                   {
+                      Models.LogicalMainWindow.DeletedBD((List<Models.Data.Company>)window.CompanBD.ItemsSource);
                       Models.LogicalMainWindow.DeletedBD((List<Models.Data.User>)window.UserBD.ItemsSource);
-
+                     
+                      
                   }));
             }
         }

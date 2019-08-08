@@ -40,6 +40,17 @@ namespace WpfApp1.Models
         {
             Models.LogicalAddUser.AddUserCompany(company, user);
         }
+
+        public static void WindowsAdd()
+        {
+            Models.LogicalAddUser.UserAdd();
+        }
+
+        //форма 2
+        public static void ClickButtonAdd(View.AddUserCompany addUserCompany)
+        {
+            Models.LogicalAddUser.ClickButtonAdd(addUserCompany);
+        }
     }
 
     

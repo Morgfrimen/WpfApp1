@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace WpfApp1.Models
 {
@@ -21,7 +22,7 @@ namespace WpfApp1.Models
         }
         #endregion
 
-        static MainWindow window=(MainWindow)Application.Current.MainWindow;
+        static MainWindow window = (MainWindow)Application.Current.MainWindow;
         public static MainWindow MainWindow { get => window; }
 
         //тупо удалям все записи в БД и приравниваем то,что есть при нажатии кнопки Изменить
@@ -31,20 +32,24 @@ namespace WpfApp1.Models
         public static void DeletedBD(List<Data.User> gridUsers)
         {
             Models.Data.ModelCode.CompanyContext bd = new Data.ModelCode.CompanyContext();
-
-            List<Data.User> User = bd.Users.ToList();
-            List<Data.Company> companies = bd.Companies.ToList();
-            bd.Companies.RemoveRange(bd.Companies);
-            for (int i = 0; i < bd.Companies.ToList().Count; i++)
+            if (gridUsers.Count > bd.Users.ToList().Count)
             {
-                bd.Companies.Add(companies[i]);
+                bd.Users.Add(gridUsers[gridUsers.Count - 1]);
             }
-            bd.Users.RemoveRange(bd.Users);
-            for (int i = 0; i < gridUsers.Count; i++)
+            for (int i = 0; i < bd.Users.ToList().Count; i++)
             {
-                bd.Users.Add(gridUsers[i]);
-            }
+                Data.User user = bd.Users.ToList()[i];
+                Data.User user1 = gridUsers[i];
+                if (user1.Login != user.Login | user1.Name != user.Name | user1.Password != user.Password)
+                {
+                    bd.Users.ToList()[i].Login = user1.Login;
+                    bd.Users.ToList()[i].Name = user1.Name;
+                    bd.Users.ToList()[i].Password = user1.Password;
+                    //bd.Users.RemoveRange(bd.Users);
+                    //bd.Users.AddRange(BD);
 
+                }
+            }
             bd.SaveChanges();
             PrintDataGrid(window.CompanBD, bd.Companies.ToList());
             PrintDataGrid(window.UserBD, bd.Users.ToList());
@@ -53,12 +58,21 @@ namespace WpfApp1.Models
 
         }
 
-        public static void PrintDataGrid(DataGrid grid,List<Data.User> items)
+        public static void PrintDataGrid(DataGrid grid, List<Data.User> items)
         {
             grid.ItemsSource = items;
             DataGridColumn column = grid.Columns[grid.Columns.Count - 1];
             column.Visibility = Visibility.Collapsed;
-
+            column = grid.Columns[0];
+            column.Visibility = Visibility.Collapsed;
+            column = grid.Columns[1];
+            column.Header = "Имя пользователя";
+            column = grid.Columns[2];
+            column.Header = "Логин";
+            column = grid.Columns[3];
+            column.Header = "Пароль";
+            column = grid.Columns[4];
+            column.Header = "Компания";
         }
 
         public static void PrintDataGrid(DataGrid grid, List<Data.Company> items)
@@ -66,10 +80,61 @@ namespace WpfApp1.Models
             grid.ItemsSource = items;
             DataGridColumn column = grid.Columns[grid.Columns.Count - 1];
             column.Visibility = Visibility.Collapsed;
+            column = grid.Columns[0];
+            column.Visibility = Visibility.Collapsed;
+            column = grid.Columns[1];
+            column.Header = "Название компании";
+            grid.Columns[2].Header = "Статус договора";
+            grid.Columns[2].Width = 150;
+            //string[] str= new string[3] { "Ещё не заключен", "Заключен", "Расторгнут" };
+            //Models.Data.ModelCode.CompanyContext bd = new Data.ModelCode.CompanyContext();
+            //List<Data.Company> companies = bd.Companies.ToList();
+
+            //grid.Columns[2] = new DataGridComboBoxColumn()
+            //{
+            //    Header ="Статус заказа",
+            //    ItemsSource=str,
+            //    Width =150,
+            //    TextBinding =new Binding() {Source=companies[0],Path=new PropertyPath("Status") }
+            //};
+
+
+
 
         }
 
+        public static void DeletedBD(List<Data.Company> gridUsers) //тут важно, если меняется компания, то нужно и пользователях её поменять
+        {
+            Models.Data.ModelCode.CompanyContext bd = new Data.ModelCode.CompanyContext();
+            if (gridUsers.Count > bd.Companies.ToList().Count)
+            {
+                bd.Companies.Add(gridUsers[gridUsers.Count - 1]);
+            }
+            for (int i = 0; i < bd.Companies.ToList().Count; i++)
+            {
+                Data.Company user = bd.Companies.ToList()[i];
+                Data.Company user1 = gridUsers[i];
+                if (user1.Name != user.Name | user1.Status != user.Status)
+                {
+                    bd.Companies.ToList()[i].Name = user1.Name;
+                    bd.Companies.ToList()[i].Status = user1.Status;
+
+                }
+            }
+            //foreach (Data.User item in bd.Users.ToList())
+            //{
+            //    if (item.Comn !=((Data.Company)(MainWindow.CompanBD.ItemsSource)).Name)
+            //    {
+            //        item.Company = (MainWindow.CompanBD.ItemsSource as Data.Company);
+            //        item.Comn = (MainWindow.CompanBD.ItemsSource as Data.Company).Name;
+            //    }
+            //}
+
+            bd.SaveChanges();
+            PrintDataGrid(window.CompanBD, bd.Companies.ToList());
+            PrintDataGrid(window.UserBD, bd.Users.ToList());
 
 
+        }
     }
 }

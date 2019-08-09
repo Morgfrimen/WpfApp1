@@ -206,6 +206,19 @@ namespace WpfApp1.ViewModels
                   }));
             }
         }
+
+        private Models.CommandMainWindow _deleted;
+        public Models.CommandMainWindow Deleted
+        {
+            get
+            {
+                return _deleted ??
+                  (_deleted = new Models.CommandMainWindow(obj =>
+                  {
+                      Models.LogicalMainWindow.ClickDelenedRow();
+                  }));
+            }
+        }
         #endregion
         #endregion
 

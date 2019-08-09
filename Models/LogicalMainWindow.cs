@@ -103,13 +103,14 @@ namespace WpfApp1.Models
 
         }
 
-        public static void DeletedBD(List<Data.Company> gridUsers) //тут важно, если меняется компания, то нужно и пользователях её поменять
+        public static void DeletedBD(List<Data.Company> gridUsers)//
         {
             Models.Data.ModelCode.CompanyContext bd = new Data.ModelCode.CompanyContext();
             if (gridUsers.Count > bd.Companies.ToList().Count)
             {
                 bd.Companies.Add(gridUsers[gridUsers.Count - 1]);
             }
+            
             for (int i = 0; i < bd.Companies.ToList().Count; i++)
             {
                 Data.Company user = bd.Companies.ToList()[i];
@@ -118,23 +119,45 @@ namespace WpfApp1.Models
                 {
                     bd.Companies.ToList()[i].Name = user1.Name;
                     bd.Companies.ToList()[i].Status = user1.Status;
-
                 }
             }
-            //foreach (Data.User item in bd.Users.ToList())
-            //{
-            //    if (item.Comn !=((Data.Company)(MainWindow.CompanBD.ItemsSource)).Name)
-            //    {
-            //        item.Company = (MainWindow.CompanBD.ItemsSource as Data.Company);
-            //        item.Comn = (MainWindow.CompanBD.ItemsSource as Data.Company).Name;
-            //    }
-            //}
-
             bd.SaveChanges();
             PrintDataGrid(window.CompanBD, bd.Companies.ToList());
             PrintDataGrid(window.UserBD, bd.Users.ToList());
+        }
 
+        public static void ClickDelenedRow()
+        {
+            Data.ModelCode.CompanyContext bd = new Data.ModelCode.CompanyContext();
+            if (MainWindow.UserBD.SelectedItem != null)
+            {
+                Data.User user = bd.Users.Where(o => o.Id ==((Data.User)MainWindow.UserBD.SelectedItem).Id).FirstOrDefault();
+                bd.Users.Remove(user);
+                bd.SaveChanges();
+                PrintDataGrid(window.CompanBD, bd.Companies.ToList());
+                PrintDataGrid(window.UserBD, bd.Users.ToList());
 
+            }
+            else if (MainWindow.CompanBD.SelectedItem != null)
+            {
+                try
+                {
+                    Data.Company user = bd.Companies.Where(o => o.Id == ((Data.Company)MainWindow.CompanBD.SelectedItem).Id).FirstOrDefault();
+                    bd.Companies.Remove(user);
+                    bd.SaveChanges();
+                    PrintDataGrid(window.CompanBD, bd.Companies.ToList());
+                    PrintDataGrid(window.UserBD, bd.Users.ToList());
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException)
+                {
+                    MessageBox.Show("Нужно удалить сначала пользователей.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show("Неуспех!");
+            }
         }
     }
 }
